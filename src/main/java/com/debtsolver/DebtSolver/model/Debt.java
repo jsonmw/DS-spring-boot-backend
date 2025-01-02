@@ -34,8 +34,8 @@ public class Debt {
 
     @NotBlank(message = "Debt type required.")
     @NotNull
-    @Column(name = "type", nullable = false)
-    private String type;
+    @Column(name = "debt_type", nullable = false, insertable = false, updatable = false)
+    private String debtType;
 
     @NotNull
     @NotBlank(message = "APR required.")

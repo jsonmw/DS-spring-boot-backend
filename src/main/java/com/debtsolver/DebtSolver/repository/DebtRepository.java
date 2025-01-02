@@ -39,7 +39,7 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
      * @param ownerId: the id of the user whose debts are being fetched
      * @return a list of debts belonging to the specified user
      */
-    List<Debt> findByTypeAndOwnerId(String type, Long ownerId);
+    List<Debt> findByDebtTypeAndOwnerId(String debtType, Long ownerId);
 
 
 }
