@@ -27,25 +27,27 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String expenseId;
-
     @NotBlank(message= "Unique debt name required.")
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotBlank(message= "Debt type required.")
     @NotNull
-    @NotBlank
+    @Column(name = "type", nullable = false)
+    private String type;
+
+    @NotNull
+    @NotBlank(message = "APR required.")
     @DecimalMin(value = "0.00", inclusive = true)  // Enforcing min value
     @DecimalMax(value = "100.00", inclusive = true) // Enforcing max value
     @Column(precision = 5, scale = 2)
     private BigDecimal apr;
 
     @NotNull
-    @NotBlank
+    @NotBlank(message = "Balance required.")
     @DecimalMin(value = "0.00", inclusive = true)  // Enforcing min value
-    @Column(precision = 5, scale = 2)
+    @Column(scale = 2)
     private BigDecimal balance;
 
     @NotNull

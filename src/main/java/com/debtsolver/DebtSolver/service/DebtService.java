@@ -14,11 +14,11 @@ public interface DebtService {
     /**
      * Retrieves a single debt by ID
      *
-     * @param debtId: numeric associated with the given debt
+     * @param id: numeric associated with the given debt
      * @param ownerId: numeric associated the owner of the debt
      * @return DTO containing the debt details
      */
-    DebtDTO getDebtByDebtId(Long debtId, Long ownerId);
+    DebtDTO getDebtByDebtId(Long id, Long ownerId);
 
     /**
      * Retrieves all expenses from database

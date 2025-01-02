@@ -8,7 +8,6 @@ import com.debtsolver.DebtSolver.repository.DebtRepository;
 import com.debtsolver.DebtSolver.service.DebtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +19,6 @@ import java.util.stream.Collectors;
 public class DebtServiceImpl implements DebtService {
 
     private final DebtRepository debtRepository;
-    private final ModelMapper modelMapper;
-
 
     /**
      * Retrieves specified debt
@@ -32,7 +29,7 @@ public class DebtServiceImpl implements DebtService {
      */
     @Override
     public DebtDTO getDebtByDebtId(Long debtId, Long ownerId) {
-        Debt debt = debtRepository.findByDebtIdAndOwnerId(debtId, ownerId)
+        Debt debt = debtRepository.findByIdAndOwnerId(debtId, ownerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Debt not found for given user"));
 
         log.info("Fetching debt {}", debt);

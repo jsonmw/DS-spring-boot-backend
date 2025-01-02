@@ -16,16 +16,14 @@ import java.util.Optional;
 @Repository
 public interface DebtRepository extends JpaRepository<Debt, Long> {
 
-    // TODO: Decide on type for ID.
-
     /**
      * Fetches a single debt associated with a specific user id.
      *
-     * @param debtId:  the id of the debt being fetched
+     * @param id:  the id of the debt being fetched
      * @param ownerId: the id of the user whose debts are being fetched
      * @return an Optional that may contain the debt if found, or empty Optional if not
      */
-    Optional<Debt> findByDebtIdAndOwnerId(Long debtId, Long ownerId);
+    Optional<Debt> findByIdAndOwnerId(Long id, Long ownerId);
 
     /**
      * Fetches all debts associated with a specific user.
@@ -36,12 +34,13 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByOwnerId(Long ownerId);
 
     /**
-     * Fetches all debts associated with a specific user id.
+     * Fetches all debts associated with a specific type.
      *
+     * @param type: Debt type to be fetched
      * @param ownerId: the id of the user whose debts are being fetched
      * @return a list of debts belonging to the specified user
      */
-    List<Debt> findByDebtTypeAndOwnerId(Long debtType, Long ownerId);
+    List<Debt> findByTypeAndOwnerId(String type, Long ownerId);
 
 
 }
