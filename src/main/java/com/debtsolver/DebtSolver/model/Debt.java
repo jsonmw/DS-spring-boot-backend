@@ -27,12 +27,12 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message= "Unique debt name required.")
+    @NotBlank(message = "Unique debt name required.")
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotBlank(message= "Debt type required.")
+    @NotBlank(message = "Debt type required.")
     @NotNull
     @Column(name = "type", nullable = false)
     private String type;

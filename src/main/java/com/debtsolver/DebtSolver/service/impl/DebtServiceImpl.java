@@ -41,7 +41,7 @@ public class DebtServiceImpl implements DebtService {
      * Retrieves all debts for a given user from database
      *
      * @param ownerId: the id of the owner for which to retrieve all debts
-     * @return list
+     * @return list of all debts associated with the given user
      */
     @Override
     public List<DebtDTO> getAllDebts(Long ownerId) {
