@@ -5,9 +5,9 @@ import com.debtsolver.DebtSolver.dto.DebtDTO;
 import java.util.List;
 
 /**
- * Service interface for Expense module
+ * Service interface for Debt objects
  *
- * @author Jason
+ * @author Jason Wild
  */
 public interface DebtService {
 
