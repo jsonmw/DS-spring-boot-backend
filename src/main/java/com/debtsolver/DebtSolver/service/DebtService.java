@@ -5,26 +5,34 @@ import com.debtsolver.DebtSolver.dto.DebtDTO;
 import java.util.List;
 
 /**
- * Service interface for Expense module
+ * Service interface for Debt objects
  *
- * @author Jason
+ * @author Jason Wild
  */
 public interface DebtService {
 
     /**
      * Retrieves a single debt by ID
      *
-     * @param id: numeric associated with the given debt
+     * @param id:      numeric associated with the given debt
      * @param ownerId: numeric associated the owner of the debt
      * @return DTO containing the debt details
      */
     DebtDTO getDebtByDebtId(Long id, Long ownerId);
 
     /**
-     * Retrieves all expenses from database
+     * Retrieves all debts from database
      *
      * @param ownerId: numeric id associated with the desired user
      * @return list of DTOs containing debt details
      */
     List<DebtDTO> getAllDebts(Long ownerId);
+
+    /**
+     * Creates new debt in the database
+     *
+     * @param debtDTO: a DTO representation of the debt details to be created
+     * @return a DTO of the successfully created debt
+     */
+    public DebtDTO createNewDebt(DebtDTO debtDTO);
 }
