@@ -14,13 +14,13 @@ import java.sql.Timestamp;
 @Builder
 public class DebtDTO {
 
-    Long id;
-    String name;
-    String debtType;
-    BigDecimal apr;
-    BigDecimal balance;
-    String description;
-    Timestamp createdA;
-    Timestamp updatedAt;
-    Long ownerId;
+    private Long id;
+    private String name;
+    private String debtType;
+    private BigDecimal apr;
+    private BigDecimal balance;
+    private String description;
+    private Timestamp createdA;
+    private Timestamp updatedAt;
+    private Long ownerId;
 }
