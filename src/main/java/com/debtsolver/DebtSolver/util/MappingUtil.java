@@ -9,7 +9,7 @@ public class MappingUtil {
     /**
      * Maps a given object to a new class
      *
-     * @param object:  the object to be mapped
+     * @param object:   the object to be mapped
      * @param newClass: the class file for the desired mapping
      * @return object constructed from the given class
      */

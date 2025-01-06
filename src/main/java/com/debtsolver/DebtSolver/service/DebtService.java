@@ -1,6 +1,7 @@
 package com.debtsolver.DebtSolver.service;
 
 import com.debtsolver.DebtSolver.dto.DebtDTO;
+import com.debtsolver.DebtSolver.io.DebtRequest;
 
 import java.util.List;
 
@@ -31,8 +32,8 @@ public interface DebtService {
     /**
      * Creates new debt in the database
      *
-     * @param debtDTO: a DTO representation of the debt details to be created
+     * @param debtRequest: a Request object representation of the debt details to be created
      * @return a DTO of the successfully created debt
      */
-    public DebtDTO createNewDebt(DebtDTO debtDTO);
+    public DebtDTO createNewDebt(DebtRequest debtRequest);
 }

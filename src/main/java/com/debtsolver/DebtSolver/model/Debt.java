@@ -1,5 +1,6 @@
 package com.debtsolver.DebtSolver.model;
 
+import com.debtsolver.DebtSolver.util.DebtType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -31,22 +32,22 @@ public class Debt {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotBlank(message = "Debt type required")
+    @NotNull(message = "Debt type required")
+    @Enumerated(EnumType.STRING)
     @Column(name = "debt_type", nullable = false, insertable = false, updatable = false)
-    private String debtType;
+    private DebtType debtType;
 
-    @NotBlank(message = "APR required")
+    @NotNull(message = "APR required")
     @DecimalMin(value = "0.00", inclusive = true)  // Enforcing min value
     @DecimalMax(value = "100.00", inclusive = true) // Enforcing max value
     @Column(precision = 5, scale = 2)
     private BigDecimal apr;
 
-    @NotBlank(message = "Balance required")
+    @NotNull(message = "Balance required")
     @DecimalMin(value = "0.00", inclusive = true)  // Enforcing min value
     @Column(scale = 2)
     private BigDecimal balance;
 
-    @NotNull
     private String description;
 
     @CreationTimestamp
