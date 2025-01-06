@@ -1,6 +1,7 @@
 package com.debtsolver.DebtSolver.repository;
 
 import com.debtsolver.DebtSolver.model.Debt;
+import com.debtsolver.DebtSolver.util.DebtType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -39,7 +40,7 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
      * @param ownerId: the id of the user whose debts are being fetched
      * @return a list of debts belonging to the specified user
      */
-    List<Debt> findByDebtTypeAndOwnerId(String debtType, Long ownerId);
+    List<Debt> findByDebtTypeAndOwnerId(DebtType debtType, Long ownerId);
 
 
 }

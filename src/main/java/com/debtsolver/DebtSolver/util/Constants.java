@@ -1,7 +1,6 @@
 package com.debtsolver.DebtSolver.util;
 
 public class Constants {
+    // Stores constants
 
-    public static final String CARD_TYPE = "CreditCard";
-    public static final String LOAN_TYPE = "Loan";
 }

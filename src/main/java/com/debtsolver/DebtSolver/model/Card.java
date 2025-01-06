@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("Card")
+@DiscriminatorValue("card")
 public class Card extends Debt {
 
     @NotBlank(message = "Cards need a valid Card Type")
