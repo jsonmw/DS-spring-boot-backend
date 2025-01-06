@@ -35,18 +35,17 @@ public class Debt {
     @Column(name = "debt_type", nullable = false, insertable = false, updatable = false)
     private String debtType;
 
-    @NotBlank(message = "APR required")
+    @NotNull(message = "APR required")
     @DecimalMin(value = "0.00", inclusive = true)  // Enforcing min value
     @DecimalMax(value = "100.00", inclusive = true) // Enforcing max value
     @Column(precision = 5, scale = 2)
     private BigDecimal apr;
 
-    @NotBlank(message = "Balance required")
+    @NotNull(message = "Balance required")
     @DecimalMin(value = "0.00", inclusive = true)  // Enforcing min value
     @Column(scale = 2)
     private BigDecimal balance;
 
-    @NotNull
     private String description;
 
     @CreationTimestamp

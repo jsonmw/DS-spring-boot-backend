@@ -1,5 +1,6 @@
 package com.debtsolver.DebtSolver.dto;
 
+import com.debtsolver.DebtSolver.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class DebtDTO {
     private BigDecimal apr;
     private BigDecimal balance;
     private String description;
-    private Timestamp createdA;
+    private Timestamp createdAt;
     private Timestamp updatedAt;
-    private Long ownerId;
+    private User owner;
 }
