@@ -18,7 +18,7 @@ public class DebtResponse {
     private String name;
     private String debtType;
     private String cardType;
-    private String loanType;
+    private String terms;
     private BigDecimal apr;
     private BigDecimal balance;
     private String description;

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@DiscriminatorValue("loan")
+@DiscriminatorValue("LOAN")
 public class Loan extends Debt {
 
     @NotBlank(message = "Loans need a valid term")

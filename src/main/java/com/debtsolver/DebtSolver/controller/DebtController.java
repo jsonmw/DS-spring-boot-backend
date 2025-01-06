@@ -15,8 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,12 +26,25 @@ public class DebtController {
     private final DebtService debtService;
     private final UserService userService;
 
+
+    /**
+     * Returns a list of all debts associated with the user
+     *
+     * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
+     * @return Response with a list of Debts for the give user
+     */
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/")
-    public List<DebtResponse> getDebts() {
+    @GetMapping("/debts/{userId}")
+    public ResponseEntity<List<DebtResponse>> getDebts(@PathVariable Long userId) {
+        // TODO: replace PathVariable when authentication implemented, and get from token
         log.info("API GET /debts called");
 
-        return new ArrayList<>();
+        List<DebtDTO> debts = debtService.getAllDebts(userId);
+        log.info("Found {} debts for {}", debts.size(), userService.getUserById(userId).getName());
+        List<DebtResponse> response = debts.stream().map(debtDTO -> MappingUtil.mapToNewClass(debtDTO, DebtResponse.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(response);
     }
 
 

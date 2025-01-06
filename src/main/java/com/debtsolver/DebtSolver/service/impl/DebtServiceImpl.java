@@ -60,15 +60,27 @@ public class DebtServiceImpl implements DebtService {
         userService.getUserById(ownerId); // validate user existence or throw exception
 
         List<Debt> list = debtRepository.findByOwnerId(ownerId);
-        log.info("Fetching all debts for user id: {} -> {}", ownerId, list);
         if (list.isEmpty()) {
             log.warn("No debts found for user id: {}", ownerId);
         }
 
-        List<DebtDTO> listOfDebts = list.stream().map(debt -> MappingUtil.mapToNewClass(debt, DebtDTO.class))
+        return list.stream()
+                .map(debt -> {
+                    if (debt instanceof Card) {
+
+                        CardDTO cardDTO = MappingUtil.mapToNewClass(debt, CardDTO.class);
+                        cardDTO.setDebtType(DebtType.CARD);
+                        return cardDTO;
+                    } else if (debt instanceof Loan) {
+                        LoanDTO loanDTO = MappingUtil.mapToNewClass(debt, LoanDTO.class);
+                        loanDTO.setDebtType(DebtType.LOAN);
+                        return loanDTO;
+                    } else {
+                        throw new IllegalArgumentException("Unknown debt type: " + debt.getClass());
+                    }
+                })
                 .collect(Collectors.toList());
 
-        return listOfDebts;
     }
 
     /**
@@ -97,11 +109,13 @@ public class DebtServiceImpl implements DebtService {
         return getDebtDTOType(debt);
     }
 
+    // Private helper methods
+
     /**
      * Extracts Debt from Request and sets correct DebtType
      *
      * @param debtRequest: a Request object representation of the debt details to be created
-     * @param debtType: type to be set
+     * @param debtType:    type to be set
      * @return Debt with correct DebtType set
      */
     private Debt extractDebt(DebtRequest debtRequest, DebtType debtType) {

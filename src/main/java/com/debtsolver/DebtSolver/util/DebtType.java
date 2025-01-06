@@ -2,11 +2,10 @@ package com.debtsolver.DebtSolver.util;
 
 /**
  * Stores constants of DebtType and provides validation method
- *
  */
 public enum DebtType {
-    CARD("card"),
-    LOAN("loan");
+    CARD("CARD"),
+    LOAN("LOAN");
 
     private final String value;
 
@@ -25,5 +24,14 @@ public enum DebtType {
             }
         }
         return false;
+    }
+
+    public static DebtType fromValue(String value) {
+        for (DebtType type : DebtType.values()) {
+            if (type.getValue().equalsIgnoreCase(value)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("Unknown enum constant: " + value);
     }
 }

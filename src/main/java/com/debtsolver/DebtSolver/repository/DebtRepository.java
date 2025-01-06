@@ -36,8 +36,8 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     /**
      * Fetches all debts associated with a specific type.
      *
-     * @param debtType:    Debt type to be fetched
-     * @param ownerId: the id of the user whose debts are being fetched
+     * @param debtType: Debt type to be fetched
+     * @param ownerId:  the id of the user whose debts are being fetched
      * @return a list of debts belonging to the specified user
      */
     List<Debt> findByDebtTypeAndOwnerId(DebtType debtType, Long ownerId);

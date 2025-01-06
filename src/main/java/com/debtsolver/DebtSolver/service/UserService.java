@@ -12,7 +12,7 @@ public interface UserService {
     /**
      * Retrieves a single user by ID
      *
-     * @param id:      numeric associated with the given debt
+     * @param id: numeric associated with the given debt
      * @return DTO containing the user details
      */
     UserDTO getUserById(Long id);
