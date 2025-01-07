@@ -37,14 +37,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return buildErrorResponse(ex, HttpStatus.NOT_FOUND, ErrorCodes.USER_NOT_FOUND, path);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Error> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+        return buildErrorResponse(ex, HttpStatus.BAD_REQUEST, ErrorCodes.INVALID_ARGUMENT, path);
+    }
+
     /**
-     *
      * Constructs the Error object for returning in handler method
      *
-     * @param ex: the exception type to be constructed
-     * @param status: the status code to return
+     * @param ex:        the exception type to be constructed
+     * @param status:    the status code to return
      * @param errorCode: the errorCode enum value
-     * @param path: the uri path on which the error was encountered
+     * @param path:      the uri path on which the error was encountered
      * @return ResponseEntity containing the error object
      */
     private ResponseEntity<Error> buildErrorResponse(Exception ex, HttpStatus status, ErrorCodes errorCode, String path) {
