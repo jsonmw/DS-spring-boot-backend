@@ -26,14 +26,12 @@ public class DebtController {
     private final DebtService debtService;
     private final UserService userService;
 
-
     /**
      * Returns a list of all debts associated with the user
      *
      * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
      * @return Response with a list of Debts for the give user
      */
-    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/debts/{userId}")
     public ResponseEntity<List<DebtResponse>> getDebts(@PathVariable Long userId) {
         // TODO: replace PathVariable when authentication implemented, and get from token
@@ -46,7 +44,6 @@ public class DebtController {
 
         return ResponseEntity.ok(response);
     }
-
 
     /**
      * Creates new debt in database

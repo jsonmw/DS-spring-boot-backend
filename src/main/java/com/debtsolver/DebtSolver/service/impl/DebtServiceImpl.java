@@ -57,8 +57,6 @@ public class DebtServiceImpl implements DebtService {
      */
     @Override
     public List<DebtDTO> getAllDebts(Long ownerId) {
-        userService.getUserById(ownerId); // validate user existence or throw exception
-
         List<Debt> list = debtRepository.findByOwnerId(ownerId);
         if (list.isEmpty()) {
             log.warn("No debts found for user id: {}", ownerId);
@@ -76,7 +74,7 @@ public class DebtServiceImpl implements DebtService {
                         loanDTO.setDebtType(DebtType.LOAN);
                         return loanDTO;
                     } else {
-                        throw new IllegalArgumentException("Unknown debt type: " + debt.getClass());
+                        throw new InvalidDebtTypeException("Invalid debt type: " + debt.getClass());
                     }
                 })
                 .collect(Collectors.toList());
@@ -129,7 +127,7 @@ public class DebtServiceImpl implements DebtService {
                 loanDebt.setDebtType(DebtType.LOAN);  // Explicitly set the debt type
                 return loanDebt;
             default:
-                throw new InvalidDebtTypeException("Invalid Debt Type");
+                throw new InvalidDebtTypeException("Invalid Debt Type: " + debtRequest.getDebtType());
         }
     }
 
