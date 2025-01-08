@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +18,5 @@ public class Error {
     private String path;
     private LocalDateTime timestamp;
     private String errorCode;
+    private Map<String, String> validationErrors;
 }

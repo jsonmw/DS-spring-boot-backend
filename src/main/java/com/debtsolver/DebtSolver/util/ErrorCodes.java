@@ -8,6 +8,7 @@ public enum ErrorCodes {
     INVALID_DEBT_TYPE("INVALID_DEBT_TYPE"),
     USER_NOT_FOUND("USER_NOT_FOUND"),
     INVALID_ARGUMENT("INVALID_ARGUMENT"),
+    ITEM_EXISTS("ITEM_EXISTS"),
     UNKNOWN_ERROR("UNKNOWN_ERROR");
 
     private final String code;

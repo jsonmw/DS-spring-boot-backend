@@ -17,4 +17,12 @@ public interface UserService {
      */
     UserDTO getUserById(Long id);
 
+    /**
+     * Creates new user in the database
+     *
+     * @param userDTO: the user to be added to the database
+     * @return userDTO: user created upon success
+     */
+    UserDTO createNewUser(UserDTO userDTO);
+
 }
