@@ -2,6 +2,7 @@ package com.debtsolver.DebtSolver.service.impl;
 
 import com.debtsolver.DebtSolver.dto.UserDTO;
 import com.debtsolver.DebtSolver.exception.ItemExistsException;
+import com.debtsolver.DebtSolver.exception.ResourceNotFoundException;
 import com.debtsolver.DebtSolver.exception.UserNotFoundException;
 import com.debtsolver.DebtSolver.io.UserResponse;
 import com.debtsolver.DebtSolver.model.User;
@@ -55,6 +56,15 @@ public class UserServiceImpl implements UserService {
 
         log.info("Created new user: {} - {}", user.getId(), user.getName());
         return MappingUtil.mapToNewClass(user, UserResponse.class);
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+
+        log.info("Deleting User: {} - {}", user.getId(), user.getName());
+        userRepository.delete(user);
     }
 
 

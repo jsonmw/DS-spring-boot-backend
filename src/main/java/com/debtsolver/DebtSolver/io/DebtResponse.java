@@ -14,7 +14,6 @@ import java.sql.Timestamp;
 @Builder
 public class DebtResponse {
 
-    private Long id;
     private String name;
     private String debtType;
     private String cardType;
