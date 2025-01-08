@@ -1,6 +1,7 @@
 package com.debtsolver.DebtSolver.service;
 
 import com.debtsolver.DebtSolver.dto.UserDTO;
+import com.debtsolver.DebtSolver.io.UserResponse;
 
 /**
  * Service interface for User objects
@@ -16,5 +17,21 @@ public interface UserService {
      * @return DTO containing the user details
      */
     UserDTO getUserById(Long id);
+
+    /**
+     * Creates new user in the database
+     *
+     * @param userDTO: the user to be added to the database
+     * @return userDTO: user created upon success
+     */
+    UserResponse createNewUser(UserDTO userDTO);
+
+    /**
+     * Creates new user in the database
+     *
+     * @param userDTO: the user to be added to the database
+     * @return userDTO: user created upon success
+     */
+    void deleteUserById(Long id);
 
 }

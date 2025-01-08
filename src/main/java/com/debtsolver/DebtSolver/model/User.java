@@ -5,7 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +26,18 @@ public class User {
     @NotBlank(message="Name cannot be blank")
     private String name;
 
-    @NotBlank(message = "E-mail cannot be blank")
+    @Column(unique = true)
     private String email;
 
     private String password;
-    private String bio;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Debt> debts = new ArrayList<>();
+
+    @Column(updatable = false)
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 }
