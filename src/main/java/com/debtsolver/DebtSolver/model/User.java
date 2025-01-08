@@ -23,7 +23,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message="Name cannot be blank")
+    @NotBlank(message = "Name cannot be blank")
     private String name;
 
     @Column(unique = true)
