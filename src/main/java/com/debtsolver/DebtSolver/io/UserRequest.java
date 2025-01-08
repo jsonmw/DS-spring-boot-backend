@@ -1,7 +1,6 @@
 package com.debtsolver.DebtSolver.io;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserRequest {
 
     @NotBlank(message="Name is required")
-    @Min(value = 3, message = "Name must be at least three characters")
+    @Size(min = 3, message = "Name must be at least three characters")
     private String name;
 
     @NotBlank(message = "Valid e-mail is required")
@@ -26,4 +25,5 @@ public class UserRequest {
     @NotBlank(message = "Password is required")
     @Size(min=8, message = "Password must be at least 8 characters")
     private String password;
+
 }

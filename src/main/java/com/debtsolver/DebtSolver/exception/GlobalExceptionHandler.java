@@ -2,8 +2,11 @@ package com.debtsolver.DebtSolver.exception;
 
 import com.debtsolver.DebtSolver.io.Error;
 import com.debtsolver.DebtSolver.util.ErrorCodes;
+import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,7 +26,7 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Error> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         return buildErrorResponse(
                 ex,
                 HttpStatus.NOT_FOUND,
@@ -33,7 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidDebtTypeException.class)
-    public ResponseEntity<Error> handleInvalidDebtTypeException(InvalidDebtTypeException ex, WebRequest request) {
+    public ResponseEntity<Object> handleInvalidDebtTypeException(InvalidDebtTypeException ex, WebRequest request) {
         return buildErrorResponse(ex,
                 HttpStatus.BAD_REQUEST,
                 ErrorCodes.INVALID_DEBT_TYPE,
@@ -42,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<Error> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
         return buildErrorResponse(
                 ex,
                 HttpStatus.NOT_FOUND,
@@ -52,7 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Error> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+    public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
         return buildErrorResponse(
                 ex,
                 HttpStatus.BAD_REQUEST,
@@ -62,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ItemExistsException.class)
-    public ResponseEntity<Error> handleItemExistsException(ItemExistsException ex, WebRequest request) {
+    public ResponseEntity<Object> handleItemExistsException(ItemExistsException ex, WebRequest request) {
         return buildErrorResponse(
                 ex,
                 HttpStatus.CONFLICT,
@@ -77,12 +80,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @param ex: passed exception
      * @return ResponseEntity containing validity errors
      */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Error> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
+    @Override
+    @Nullable
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage())
-        );
+        ex.getBindingResult().
+                getFieldErrors()
+                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage())
+                );
 
         return buildErrorResponse(
                 ex,
@@ -106,14 +116,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /**
      * Constructs the Error object for returning in handler method
      *
-     * @param ex:        the exception type to be constructed
-     * @param status:    the status code to return
-     * @param errorCode: the errorCode enum value
-     * @param path:      the uri path on which the error was encountered
-     * @param validationErrors:      optional validation errors
+     * @param ex:               the exception type to be constructed
+     * @param status:           the status code to return
+     * @param errorCode:        the errorCode enum value
+     * @param path:             the uri path on which the error was encountered
+     * @param validationErrors: optional validation errors
      * @return ResponseEntity containing the error object
      */
-    private ResponseEntity<Error> buildErrorResponse(Exception ex, HttpStatus status, ErrorCodes errorCode, String path, Map<String, String> validationErrors) {
+    private ResponseEntity<Object> buildErrorResponse(Exception ex, HttpStatus status, ErrorCodes errorCode, String path, Map<String, String> validationErrors) {
         Error error = Error.builder()
                 .errorCode(errorCode.getCode())
                 .statusCode(status.value())

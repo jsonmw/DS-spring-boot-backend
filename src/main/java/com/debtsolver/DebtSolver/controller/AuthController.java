@@ -25,11 +25,11 @@ public class AuthController {
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
         log.info("POST on /register is called {}", userRequest);
         UserDTO userDTO = MappingUtil.mapToNewClass(userRequest, UserDTO.class);
-        userDTO = userService.createNewUser(userDTO);
+        UserResponse response= userService.createNewUser(userDTO);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(MappingUtil.mapToNewClass(userDTO, UserResponse.class));
+                .body(response);
     }
 
 }
