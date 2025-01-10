@@ -39,7 +39,7 @@ public class DebtServiceImpl implements DebtService {
      * @return DTO containing fetched debt
      */
     @Override
-    public DebtDTO getDebtByDebtId(Long debtId, Long ownerId) {
+    public DebtDTO getDebtByDebtIdAndOwnerId(Long debtId, Long ownerId) {
 
         Debt debt = debtRepository.findByIdAndOwner_Id(debtId, ownerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Debt not found for given user"));

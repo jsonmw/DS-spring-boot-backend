@@ -8,6 +8,7 @@ import com.debtsolver.DebtSolver.service.DebtService;
 import com.debtsolver.DebtSolver.service.UserService;
 import com.debtsolver.DebtSolver.util.DebtType;
 import com.debtsolver.DebtSolver.util.MappingUtil;
+import com.debtsolver.DebtSolver.util.Routes;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +31,9 @@ public class DebtController {
      * Returns a list of all debts associated with the user
      *
      * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
-     * @return Response with a list of Debts for the give user
+     * @return Response Entity containing a list of Debts for the give user
      */
-    @GetMapping("/debts/{userId}")
+    @GetMapping(Routes.ALL_DEBTS + "{userId}")
     public ResponseEntity<List<DebtResponse>> getDebts(@PathVariable Long userId) {
         // TODO: replace PathVariable when authentication implemented, and get from token
         log.info("API GET /debts called");
@@ -46,12 +47,29 @@ public class DebtController {
     }
 
     /**
+     * Returns a single debt
+     *
+     * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
+     * @param debtId: denotes the debt to search
+     * @return Response Entity containing the debt details
+     */
+    @GetMapping(Routes.USER_PATH + "{userId}" + Routes.SINGLE_DEBT + "{debtId}")
+    public ResponseEntity<DebtResponse> getSingleDebt(@PathVariable Long userId, @PathVariable Long debtId) {
+        log.info("API GET {}{}{}{} called", Routes.USER_PATH, userId, Routes.SINGLE_DEBT, debtId);
+
+        DebtDTO debtDTO = debtService.getDebtByDebtIdAndOwnerId(debtId, userId);
+
+        return ResponseEntity.ok().body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
+
+    }
+
+    /**
      * Creates new debt in database
      *
      * @param debtRequest
      * @return debtResponse
      */
-    @PostMapping("/debts")
+    @PostMapping(Routes.NEW_DEBT)
     public ResponseEntity<DebtResponse> saveExpenseDetails(@RequestBody @Valid DebtRequest debtRequest) {
         log.info("API POST /debts called for OwnerID: {}", debtRequest.getOwner());
 

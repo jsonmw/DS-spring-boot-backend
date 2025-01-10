@@ -5,6 +5,7 @@ import com.debtsolver.DebtSolver.io.UserRequest;
 import com.debtsolver.DebtSolver.io.UserResponse;
 import com.debtsolver.DebtSolver.service.UserService;
 import com.debtsolver.DebtSolver.util.MappingUtil;
+import com.debtsolver.DebtSolver.util.Routes;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ public class AuthController {
 
     private final UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping(Routes.REGISTER)
     public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
         log.info("POST on /register is called {}", userRequest);
         UserDTO userDTO = MappingUtil.mapToNewClass(userRequest, UserDTO.class);
@@ -30,12 +31,12 @@ public class AuthController {
                 .body(response);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping(Routes.USER_PATH + "{id}")
     public ResponseEntity<Object> deleteUserById(@PathVariable Long id) {
-        log.info("DELETE on /user/{} called", id);
+        log.info("DELETE on" + Routes.USER_PATH + "{} called", id);
         userService.deleteUserById(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User successfully deleted with id "+ id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User successfully deleted with id " + id);
     }
 
 }
