@@ -31,7 +31,7 @@ public class DebtController {
      * Returns a list of all debts associated with the user
      *
      * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
-     * @return Response with a list of Debts for the give user
+     * @return Response Entity containing a list of Debts for the give user
      */
     @GetMapping(Routes.ALL_DEBTS + "{userId}")
     public ResponseEntity<List<DebtResponse>> getDebts(@PathVariable Long userId) {
@@ -44,6 +44,23 @@ public class DebtController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Returns a single debt
+     *
+     * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
+     * @param debtId: denotes the debt to search
+     * @return Response Entity containing the debt details
+     */
+    @GetMapping(Routes.USER_PATH + "{userId}" + Routes.SINGLE_DEBT + "{debtId}")
+    public ResponseEntity<DebtResponse> getSingleDebt(@PathVariable Long userId, @PathVariable Long debtId) {
+        log.info("API GET {}{}{}{} called", Routes.USER_PATH, userId, Routes.SINGLE_DEBT, debtId);
+
+        DebtDTO debtDTO = debtService.getDebtByDebtIdAndOwnerId(debtId, userId);
+
+        return ResponseEntity.ok().body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
+
     }
 
     /**

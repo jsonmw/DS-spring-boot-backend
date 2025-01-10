@@ -19,7 +19,7 @@ public interface DebtService {
      * @param ownerId: numeric associated the owner of the debt
      * @return DTO containing the debt details
      */
-    DebtDTO getDebtByDebtId(Long id, Long ownerId);
+    DebtDTO getDebtByDebtIdAndOwnerId(Long id, Long ownerId);
 
     /**
      * Retrieves all debts from database

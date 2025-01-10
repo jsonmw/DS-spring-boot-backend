@@ -31,9 +31,9 @@ public class AuthController {
                 .body(response);
     }
 
-    @DeleteMapping(Routes.USER_DELETE + "{id}")
+    @DeleteMapping(Routes.USER_PATH + "{id}")
     public ResponseEntity<Object> deleteUserById(@PathVariable Long id) {
-        log.info("DELETE on" + Routes.USER_DELETE + "{} called", id);
+        log.info("DELETE on" + Routes.USER_PATH + "{} called", id);
         userService.deleteUserById(id);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User successfully deleted with id " + id);
