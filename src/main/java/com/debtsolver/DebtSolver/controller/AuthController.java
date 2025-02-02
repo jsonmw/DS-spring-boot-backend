@@ -36,7 +36,7 @@ public class AuthController {
         log.info("DELETE on" + Routes.USER_PATH + "{} called", id);
         userService.deleteUserById(id);
 
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User successfully deleted with id " + id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("UserAccount successfully deleted with id " + id);
     }
 
 }

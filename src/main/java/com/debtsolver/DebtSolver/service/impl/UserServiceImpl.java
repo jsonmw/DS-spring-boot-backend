@@ -5,7 +5,7 @@ import com.debtsolver.DebtSolver.exception.ItemExistsException;
 import com.debtsolver.DebtSolver.exception.ResourceNotFoundException;
 import com.debtsolver.DebtSolver.exception.UserNotFoundException;
 import com.debtsolver.DebtSolver.io.UserResponse;
-import com.debtsolver.DebtSolver.model.User;
+import com.debtsolver.DebtSolver.model.UserAccount;
 import com.debtsolver.DebtSolver.repository.UserRepository;
 import com.debtsolver.DebtSolver.service.UserService;
 import com.debtsolver.DebtSolver.util.MappingUtil;
@@ -31,10 +31,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDTO getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("No user found with ID: " + id));
-        log.info("Returning User {} with ID {}", user.getName(), id);
-        return MappingUtil.mapToNewClass(user, UserDTO.class);
+        UserAccount userAccount = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("No userAccount found with ID: " + id));
+        log.info("Returning UserAccount {} with ID {}", userAccount.getName(), id);
+        return MappingUtil.mapToNewClass(userAccount, UserDTO.class);
     }
 
     /**
@@ -47,24 +47,24 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponse createNewUser(UserDTO userDTO) {
         if (userRepository.existsByEmail(userDTO.getEmail())) {
-            throw new ItemExistsException("A user account with this e-mail already exists: " + userDTO.getEmail());
+            throw new ItemExistsException("A userAccount account with this e-mail already exists: " + userDTO.getEmail());
         }
 
-        User user = MappingUtil.mapToNewClass(userDTO, User.class);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        UserAccount userAccount = MappingUtil.mapToNewClass(userDTO, UserAccount.class);
+        userAccount.setPassword(passwordEncoder.encode(userAccount.getPassword()));
+        userRepository.save(userAccount);
 
-        log.info("Created new user: {} - {}", user.getId(), user.getName());
-        return MappingUtil.mapToNewClass(user, UserResponse.class);
+        log.info("Created new userAccount: {} - {}", userAccount.getId(), userAccount.getName());
+        return MappingUtil.mapToNewClass(userAccount, UserResponse.class);
     }
 
     @Override
     public void deleteUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
+        UserAccount userAccount = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("UserAccount not found with ID: " + id));
 
-        log.info("Deleting User: {} - {}", user.getId(), user.getName());
-        userRepository.delete(user);
+        log.info("Deleting UserAccount: {} - {}", userAccount.getId(), userAccount.getName());
+        userRepository.delete(userAccount);
     }
 
 

@@ -4,7 +4,7 @@ import com.debtsolver.DebtSolver.dto.UserDTO;
 import com.debtsolver.DebtSolver.io.UserResponse;
 
 /**
- * Service interface for User objects
+ * Service interface for UserAccount objects
  *
  * @author Jason Wild
  */
@@ -27,10 +27,10 @@ public interface UserService {
     UserResponse createNewUser(UserDTO userDTO);
 
     /**
-     * Creates new user in the database
+     * Deletes user from the database
      *
-     * @param userDTO: the user to be added to the database
-     * @return userDTO: user created upon success
+     * @param id: the ID of the user to be deleted
+     * @return void
      */
     void deleteUserById(Long id);
 

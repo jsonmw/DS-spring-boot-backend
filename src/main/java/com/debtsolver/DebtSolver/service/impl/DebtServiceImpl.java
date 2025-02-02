@@ -9,7 +9,7 @@ import com.debtsolver.DebtSolver.io.DebtRequest;
 import com.debtsolver.DebtSolver.model.Card;
 import com.debtsolver.DebtSolver.model.Debt;
 import com.debtsolver.DebtSolver.model.Loan;
-import com.debtsolver.DebtSolver.model.User;
+import com.debtsolver.DebtSolver.model.UserAccount;
 import com.debtsolver.DebtSolver.repository.DebtRepository;
 import com.debtsolver.DebtSolver.service.DebtService;
 import com.debtsolver.DebtSolver.service.UserService;
@@ -44,7 +44,7 @@ public class DebtServiceImpl implements DebtService {
         Debt debt = debtRepository.findByIdAndOwner_Id(debtId, ownerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Debt not found for given user"));
 
-        log.info("Fetching debt {}", debt);
+        log.info("Fetching debt {} for user {}", debt.getName(), userService.getUserById(ownerId).getName());
 
         return MappingUtil.mapToNewClass(debt, DebtDTO.class);
     }
@@ -91,7 +91,7 @@ public class DebtServiceImpl implements DebtService {
     @Transactional
     public DebtDTO createNewDebt(DebtRequest debtRequest) {
 
-        User owner = MappingUtil.mapToNewClass(userService.getUserById(debtRequest.getOwner()), User.class);
+        UserAccount owner = MappingUtil.mapToNewClass(userService.getUserById(debtRequest.getOwner()), UserAccount.class);
         DebtType debtType;
         try {
             debtType = DebtType.valueOf(debtRequest.getDebtType().toUpperCase());
