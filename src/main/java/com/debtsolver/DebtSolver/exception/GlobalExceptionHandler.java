@@ -80,7 +80,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return buildErrorResponse(
                 ex,
-                ex.getStatus(),
+                HttpStatus.UNAUTHORIZED,
                 errorCode,
                 getRequestPath(request),
                 null);

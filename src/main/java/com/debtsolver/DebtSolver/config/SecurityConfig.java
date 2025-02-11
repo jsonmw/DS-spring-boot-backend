@@ -1,7 +1,8 @@
 package com.debtsolver.DebtSolver.config;
 
-import com.debtsolver.DebtSolver.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.debtsolver.DebtSolver.config.filters.JwtAuthFilter;
+import com.debtsolver.DebtSolver.config.manager.CustomAuthenticationManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -14,13 +15,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private CorsFilter corsFilter;
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomAuthenticationManager customAuthenticationManager;
+    private final CorsFilter corsFilter;
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -28,6 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll().anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)  // Ensure CORS filter runs before security filter
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .authenticationManager(customAuthenticationManager)
                 .httpBasic(Customizer.withDefaults()).build();
     }
     
@@ -36,5 +38,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

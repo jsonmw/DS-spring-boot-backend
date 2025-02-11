@@ -18,6 +18,8 @@ public interface UserService {
      */
     UserDTO getUserById(Long id);
 
+    UserDTO getUserByEmail(String email);
+
     /**
      * Creates new user in the database
      *

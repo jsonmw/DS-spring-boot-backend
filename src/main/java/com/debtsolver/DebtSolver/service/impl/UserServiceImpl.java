@@ -38,6 +38,20 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Retrieves a single user by email
+     *
+     * @param email: the email of the user being retrieved
+     * @return DTO containing the user details
+     */
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        UserAccount userAccount = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("No userAccount found with email: " + email));
+        log.info("Returning UserAccount {} with Email {}", userAccount.getName(), email);
+        return MappingUtil.mapToNewClass(userAccount, UserDTO.class);
+    }
+
+    /**
      * Creates new user in the database
      *
      * @param userDTO: the user to be added to the database
