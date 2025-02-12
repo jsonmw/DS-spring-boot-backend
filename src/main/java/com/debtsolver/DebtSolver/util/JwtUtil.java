@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.debtsolver.DebtSolver.exception.TokenException;
 import com.debtsolver.DebtSolver.service.TokenBlacklistService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -33,16 +34,16 @@ public class JwtUtil {
         return getDecodedJwt(token).getSubject();
     }
 
-    /**
-     * Check if given token is expired
-     *
-     * @param token: String representation of the token
-     * @return boolean : true: expired, false: valid
-     */
-    public boolean isTokenExpired(String token) {
-        DecodedJWT decodedJWT = getDecodedJwt(token);
-        return (decodedJWT.getExpiresAt() != null && decodedJWT.getExpiresAt().before(new Date()));
-    }
+//    /**
+//     * Check if given token is expired
+//     *
+//     * @param token: String representation of the token
+//     * @return boolean : true: expired, false: valid
+//     */
+//    public boolean isTokenExpired(String token) {
+//        DecodedJWT decodedJWT = getDecodedJwt(token);
+//        return );
+//    }
 
     /**
      * Create new JWT with Auth0
@@ -60,6 +61,21 @@ public class JwtUtil {
     }
 
     /**
+     * Extracts the JWT from a Request Header, or returns null if none exists
+     *
+     * @param request : The HTTP request that may or may not contain the token
+     * @return String containing the token or null
+     */
+    public String extractTokenFromRequest(HttpServletRequest request) {
+        String header = request.getHeader(Constants.AUTH_HEADER);
+        if (header !=null && header.startsWith(Constants.TOKEN_START)) {
+            return header.substring(Constants.TOKEN_START_LENGTH);
+        }
+        return null;
+    }
+
+
+    /**
      * Utility method to decode a JWT using Auth0.
      *
      * @param token : A String representation of the token
@@ -75,7 +91,7 @@ public class JwtUtil {
                     .build()
                     .verify(token);
 
-            if (isTokenExpired(token)) {
+            if ((decodedJWT.getExpiresAt() != null && decodedJWT.getExpiresAt().before(new Date()))) {
                 throw new TokenException("Token has expired");
             }
 

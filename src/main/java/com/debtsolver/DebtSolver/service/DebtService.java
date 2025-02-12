@@ -19,15 +19,14 @@ public interface DebtService {
      * @param ownerId: numeric associated the owner of the debt
      * @return DTO containing the debt details
      */
-    DebtDTO getDebtByDebtIdAndOwnerId(Long id, Long ownerId);
+    DebtDTO getDebtById(Long id);
 
     /**
      * Retrieves all debts from database
      *
-     * @param ownerId: numeric id associated with the desired user
-     * @return list of DTOs containing debt details
+     * @return list of DTOs containing debt details for logged in user
      */
-    List<DebtDTO> getAllDebts(Long ownerId);
+    List<DebtDTO> getAllDebts();
 
     /**
      * Creates new debt in the database
