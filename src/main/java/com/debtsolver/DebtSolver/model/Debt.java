@@ -60,6 +60,6 @@ public class Debt {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private User owner;
+    private UserAccount owner;
 
 }

@@ -9,8 +9,9 @@ import com.debtsolver.DebtSolver.io.DebtRequest;
 import com.debtsolver.DebtSolver.model.Card;
 import com.debtsolver.DebtSolver.model.Debt;
 import com.debtsolver.DebtSolver.model.Loan;
-import com.debtsolver.DebtSolver.model.User;
+import com.debtsolver.DebtSolver.model.UserAccount;
 import com.debtsolver.DebtSolver.repository.DebtRepository;
+import com.debtsolver.DebtSolver.service.AuthService;
 import com.debtsolver.DebtSolver.service.DebtService;
 import com.debtsolver.DebtSolver.service.UserService;
 import com.debtsolver.DebtSolver.util.DebtType;
@@ -29,22 +30,23 @@ import java.util.stream.Collectors;
 public class DebtServiceImpl implements DebtService {
 
     private final DebtRepository debtRepository;
+    private final AuthService authService;
     private final UserService userService;
 
     /**
      * Retrieves specified debt
      *
      * @param debtId:  id for desired debt
-     * @param ownerId: id for associated owner
      * @return DTO containing fetched debt
      */
     @Override
-    public DebtDTO getDebtByDebtIdAndOwnerId(Long debtId, Long ownerId) {
+    public DebtDTO getDebtById(Long debtId) {
+        Long ownerId = authService.getLoggedInUser().getId();
 
         Debt debt = debtRepository.findByIdAndOwner_Id(debtId, ownerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Debt not found for given user"));
 
-        log.info("Fetching debt {}", debt);
+        log.info("Fetching debt {} for user {}", debt.getName(), userService.getUserById(ownerId).getName());
 
         return MappingUtil.mapToNewClass(debt, DebtDTO.class);
     }
@@ -52,12 +54,13 @@ public class DebtServiceImpl implements DebtService {
     /**
      * Retrieves all debts for a given user from database
      *
-     * @param ownerId: the id of the owner for which to retrieve all debts
      * @return list of all debts associated with the given user
      */
     @Override
-    public List<DebtDTO> getAllDebts(Long ownerId) {
+    public List<DebtDTO> getAllDebts() {
+        Long ownerId = authService.getLoggedInUser().getId();
         List<Debt> list = debtRepository.findByOwnerId(ownerId);
+
         if (list.isEmpty()) {
             log.warn("No debts found for user id: {}", ownerId);
         }
@@ -90,8 +93,9 @@ public class DebtServiceImpl implements DebtService {
     @Override
     @Transactional
     public DebtDTO createNewDebt(DebtRequest debtRequest) {
+        Long ownerId = authService.getLoggedInUser().getId();
+        UserAccount owner = MappingUtil.mapToNewClass(userService.getUserById(ownerId), UserAccount.class);
 
-        User owner = MappingUtil.mapToNewClass(userService.getUserById(debtRequest.getOwner()), User.class);
         DebtType debtType;
         try {
             debtType = DebtType.valueOf(debtRequest.getDebtType().toUpperCase());

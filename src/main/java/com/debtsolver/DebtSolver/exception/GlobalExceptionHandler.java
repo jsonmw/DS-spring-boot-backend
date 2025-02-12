@@ -74,6 +74,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 null);
     }
 
+
+    @ExceptionHandler(AuthException.class) // Handles both AuthException and TokenException
+    public ResponseEntity<Object> handleAuthException(AuthException ex, WebRequest request) {
+        log.info("Handling exception {}", ex.getClass());
+        ErrorCodes errorCode = (ex instanceof TokenException) ? ErrorCodes.TOKEN_INVALID : ErrorCodes.AUTH_ERROR;
+
+        return buildErrorResponse(
+                ex,
+                HttpStatus.UNAUTHORIZED,
+                errorCode,
+                getRequestPath(request),
+                null);
+    }
+
     /**
      * Handles invalid Request Bodies that throw MethodArgumentNotValidExceptions
      *
@@ -102,6 +116,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 errors
         );
     }
+
 
     /**
      * Extract path from WebRequest

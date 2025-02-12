@@ -1,6 +1,6 @@
 package com.debtsolver.DebtSolver.dto;
 
-import com.debtsolver.DebtSolver.model.User;
+import com.debtsolver.DebtSolver.model.UserAccount;
 import com.debtsolver.DebtSolver.util.DebtType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,5 +24,5 @@ public class DebtDTO {
     private String description;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    private User owner;
+    private UserAccount owner;
 }

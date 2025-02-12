@@ -1,6 +1,7 @@
 package com.debtsolver.DebtSolver.service;
 
 import com.debtsolver.DebtSolver.exception.UserNotFoundException;
+import com.debtsolver.DebtSolver.model.UserAccount;
 import com.debtsolver.DebtSolver.repository.UserRepository;
 import com.debtsolver.DebtSolver.util.Constants;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UserNotFoundException {
 
-        User user = userRepository.findByEmail(email)
+        UserAccount userAccount = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(Constants.USER_NOT_FOUND + email));
 
-        log.info("Inside loadByUserName()::: Printing User details {}", user);
-        return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
+        log.info("Inside loadByUserName()::: Printing UserAccount details {}", userAccount.getName());
+        return new User(userAccount.getEmail(), userAccount.getPassword(), new ArrayList<>());
     }
 }

@@ -4,6 +4,7 @@ import com.debtsolver.DebtSolver.dto.DebtDTO;
 import com.debtsolver.DebtSolver.exception.InvalidDebtTypeException;
 import com.debtsolver.DebtSolver.io.DebtRequest;
 import com.debtsolver.DebtSolver.io.DebtResponse;
+import com.debtsolver.DebtSolver.service.AuthService;
 import com.debtsolver.DebtSolver.service.DebtService;
 import com.debtsolver.DebtSolver.service.UserService;
 import com.debtsolver.DebtSolver.util.DebtType;
@@ -25,21 +26,19 @@ import java.util.stream.Collectors;
 public class DebtController {
 
     private final DebtService debtService;
+    private final AuthService authService;
     private final UserService userService;
 
     /**
-     * Returns a list of all debts associated with the user
+     * Returns a list of all debts associated with the logged in user
      *
-     * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
-     * @return Response Entity containing a list of Debts for the give user
+     * @return Response Entity containing a list of Debts
      */
-    @GetMapping(Routes.ALL_DEBTS + "{userId}")
-    public ResponseEntity<List<DebtResponse>> getDebts(@PathVariable Long userId) {
-        // TODO: replace PathVariable when authentication implemented, and get from token
+    @GetMapping(Routes.ALL_DEBTS)
+    public ResponseEntity<List<DebtResponse>> getDebts() {
         log.info("API GET /debts called");
-
-        List<DebtDTO> debts = debtService.getAllDebts(userId);
-        log.info("Found {} debts for {}", debts.size(), userService.getUserById(userId).getName());
+        List<DebtDTO> debts = debtService.getAllDebts();
+        log.info("Found {} debts for {}", debts.size(), authService.getLoggedInUser().getName());
         List<DebtResponse> response = debts.stream().map(debtDTO -> MappingUtil.mapToNewClass(debtDTO, DebtResponse.class))
                 .collect(Collectors.toList());
 
@@ -49,15 +48,14 @@ public class DebtController {
     /**
      * Returns a single debt
      *
-     * @param userId: denotes the user to find debts for (TODO: REMOVE THIS WHEN AUTH IMPLEMENTED)
      * @param debtId: denotes the debt to search
      * @return Response Entity containing the debt details
      */
-    @GetMapping(Routes.USER_PATH + "{userId}" + Routes.SINGLE_DEBT + "{debtId}")
-    public ResponseEntity<DebtResponse> getSingleDebt(@PathVariable Long userId, @PathVariable Long debtId) {
-        log.info("API GET {}{}{}{} called", Routes.USER_PATH, userId, Routes.SINGLE_DEBT, debtId);
+    @GetMapping(Routes.SINGLE_DEBT + "{debtId}")
+    public ResponseEntity<DebtResponse> getSingleDebt( @PathVariable Long debtId) {
+        log.info("API GET {}{} called",Routes.SINGLE_DEBT, debtId);
 
-        DebtDTO debtDTO = debtService.getDebtByDebtIdAndOwnerId(debtId, userId);
+        DebtDTO debtDTO = debtService.getDebtById(debtId);
 
         return ResponseEntity.ok().body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
 
@@ -71,7 +69,7 @@ public class DebtController {
      */
     @PostMapping(Routes.NEW_DEBT)
     public ResponseEntity<DebtResponse> saveExpenseDetails(@RequestBody @Valid DebtRequest debtRequest) {
-        log.info("API POST /debts called for OwnerID: {}", debtRequest.getOwner());
+        log.info("API POST /debts called for OwnerID: {}", authService.getLoggedInUser());
 
         if (!DebtType.isValid(debtRequest.getDebtType())) {
             throw new InvalidDebtTypeException("Invalid Debt Type: " + debtRequest.getDebtType());

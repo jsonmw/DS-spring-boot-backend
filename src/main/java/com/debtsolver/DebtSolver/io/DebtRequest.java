@@ -17,8 +17,6 @@ import java.math.BigDecimal;
 @Builder
 public class DebtRequest {
 
-    private Long owner; // TODO: will remove this once I implement the auth
-
     @NotBlank(message = "Debt name is required")
     @Size(min = 3, message = "Debt name is must be at least 3 characters.")
     private String name;
