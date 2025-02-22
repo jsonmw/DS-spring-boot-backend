@@ -74,6 +74,7 @@ public class AuthController {
      *
      * @param request : POST request containing the token
      */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(Routes.LOGOUT)
     public void logout(HttpServletRequest request) {
         log.info("POST on /logout is called for user {}", authService.getLoggedInUser().getName());
