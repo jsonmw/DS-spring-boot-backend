@@ -58,6 +58,7 @@ public class AuthController {
      * @param AuthRequest : contains credentials
      * @return AuthResponse : confirms username and returns new token
      */
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping(Routes.LOGIN)
     public AuthResponse authenticateLogin(@RequestBody AuthRequest authRequest) throws Exception {
         log.info("POST on /login is called {}", authRequest.getEmail());
@@ -74,7 +75,7 @@ public class AuthController {
      *
      * @param request : POST request containing the token
      */
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(Routes.LOGOUT)
     public void logout(HttpServletRequest request) {
         log.info("POST on /logout is called for user {}", authService.getLoggedInUser().getName());
