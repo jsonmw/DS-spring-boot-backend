@@ -6,7 +6,6 @@ import com.debtsolver.DebtSolver.io.DebtRequest;
 import com.debtsolver.DebtSolver.io.DebtResponse;
 import com.debtsolver.DebtSolver.service.AuthService;
 import com.debtsolver.DebtSolver.service.DebtService;
-import com.debtsolver.DebtSolver.service.UserService;
 import com.debtsolver.DebtSolver.util.DebtType;
 import com.debtsolver.DebtSolver.util.MappingUtil;
 import com.debtsolver.DebtSolver.util.Routes;
@@ -27,7 +26,6 @@ public class DebtController {
 
     private final DebtService debtService;
     private final AuthService authService;
-    private final UserService userService;
 
     /**
      * Returns a list of all debts associated with the logged in user
