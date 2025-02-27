@@ -35,4 +35,12 @@ public interface DebtService {
      * @return a DTO of the successfully created debt
      */
     public DebtDTO createNewDebt(DebtRequest debtRequest);
+
+    /**
+     * Deletes debt from the Database
+     *
+     * @param id: the numeric id of the debt object to be deleted
+     * @return void
+     */
+    public void deleteDebtById(Long id);
 }
