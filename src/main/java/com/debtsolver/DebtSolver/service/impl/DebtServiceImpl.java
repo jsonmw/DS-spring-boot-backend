@@ -19,6 +19,7 @@ import com.debtsolver.DebtSolver.util.MappingUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -109,6 +110,25 @@ public class DebtServiceImpl implements DebtService {
         debtRepository.save(debt);
 
         return getDebtDTOType(debt);
+    }
+
+    /**
+     * Deletes debt from the Database
+     *
+     * @param id: the id of the debt to be deleted
+     * @return void
+     */
+    @Transactional
+    public void deleteDebtById(Long id) {
+        try {
+            getDebtById(id); // validate debt exists and belongs to logged-in user
+
+            Debt debt = debtRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Debt with ID " + id + " not found"));
+            debt.getOwner().getDebts().remove(debt);
+            debtRepository.delete(debt);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException("Debt with ID " + id + " not found");
+        }
     }
 
     // Private helper methods

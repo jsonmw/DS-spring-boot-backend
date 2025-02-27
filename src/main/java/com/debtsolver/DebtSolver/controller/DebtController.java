@@ -51,7 +51,7 @@ public class DebtController {
      */
     @GetMapping(Routes.SINGLE_DEBT + "{debtId}")
     public ResponseEntity<DebtResponse> getSingleDebt( @PathVariable Long debtId) {
-        log.info("API GET {}{} called",Routes.SINGLE_DEBT, debtId);
+        log.info("API GET {}/{} called",Routes.SINGLE_DEBT, debtId);
 
         DebtDTO debtDTO = debtService.getDebtById(debtId);
 
@@ -66,8 +66,8 @@ public class DebtController {
      * @return debtResponse
      */
     @PostMapping(Routes.NEW_DEBT)
-    public ResponseEntity<DebtResponse> saveExpenseDetails(@RequestBody @Valid DebtRequest debtRequest) {
-        log.info("API POST /debts called for OwnerID: {}", authService.getLoggedInUser());
+    public ResponseEntity<DebtResponse> saveDebtDetails(@RequestBody @Valid DebtRequest debtRequest) {
+        log.info("API POST {} called for OwnerID: {}", Routes.NEW_DEBT, authService.getLoggedInUser());
 
         if (!DebtType.isValid(debtRequest.getDebtType())) {
             throw new InvalidDebtTypeException("Invalid Debt Type: " + debtRequest.getDebtType());
@@ -75,5 +75,19 @@ public class DebtController {
 
         DebtDTO debtDTO = debtService.createNewDebt(debtRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
+    }
+
+    /** Delete debt from database
+     *
+     * @param debtId: numeric ID for the debt to be deleted
+     * @return: void
+     */
+    @DeleteMapping(Routes.SINGLE_DEBT + "{debtId}")
+    public ResponseEntity<Object> deleteDebt(@PathVariable Long debtId) {
+        log.info("API DELETE {}{} called", Routes.SINGLE_DEBT, debtId);
+
+        debtService.deleteDebtById(debtId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Debt successfully deleted with id " + debtId);
     }
 }
