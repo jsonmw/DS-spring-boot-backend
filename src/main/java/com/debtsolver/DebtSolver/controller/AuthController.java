@@ -58,16 +58,15 @@ public class AuthController {
      * @param AuthRequest : contains credentials
      * @return AuthResponse : confirms username and returns new token
      */
-    @ResponseStatus(HttpStatus.OK)
     @PostMapping(Routes.LOGIN)
-    public AuthResponse authenticateLogin(@RequestBody AuthRequest authRequest) throws Exception {
+    public ResponseEntity<AuthResponse> authenticateLogin(@RequestBody AuthRequest authRequest) throws Exception {
         log.info("POST on /login is called {}", authRequest.getEmail());
         String email = authRequest.getEmail();
 
         authenticate(authRequest);
         final String token = jwtUtil.generateToken(email);
 
-        return new AuthResponse(token, email);
+        return ResponseEntity.status(HttpStatus.OK).body(new AuthResponse(token, email));
     }
 
     /**

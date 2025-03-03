@@ -28,7 +28,7 @@ public class DebtController {
     private final AuthService authService;
 
     /**
-     * Returns a list of all debts associated with the logged in user
+     * Returns a list of all debts associated with the logged-in user
      *
      * @return Response Entity containing a list of Debts
      */
@@ -63,7 +63,7 @@ public class DebtController {
      * Creates new debt in database
      *
      * @param debtRequest
-     * @return debtResponse and 201 statuscode
+     * @return debtResponse and 201 status code
      */
     @PostMapping(Routes.NEW_DEBT)
     public ResponseEntity<DebtResponse> saveDebtDetails(@RequestBody @Valid DebtRequest debtRequest) {
@@ -80,10 +80,11 @@ public class DebtController {
     /**
      * Updates existing debt in database
      *
-     * @param debtRequest
+     * @param updateRequest : request with information for the Debt update
+     * @param debtId        : id of the Debt passed in the URI
      * @return debtResponse and 200 status code
      */
-    @PutMapping(Routes.SINGLE_DEBT + "{debtId")
+    @PutMapping(Routes.SINGLE_DEBT + "{debtId}")
     public ResponseEntity<DebtResponse> updateDebtDetails(@RequestBody @Valid DebtRequest updateRequest, @PathVariable Long debtId) {
         log.info("API PUT {}{} request: {}", Routes.SINGLE_DEBT, debtId, updateRequest);
         DebtDTO debtDTO = MappingUtil.mapToNewClass(updateRequest, DebtDTO.class);

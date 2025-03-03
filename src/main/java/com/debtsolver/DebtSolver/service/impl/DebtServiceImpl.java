@@ -113,11 +113,34 @@ public class DebtServiceImpl implements DebtService {
     }
 
     /**
+     * Updates existing debt in the database
+     *
+     * @param updated: a DTO representation of the debt details to be updated
+     * @param id       : the id of the debt to be updated
+     * @return a DTO of the successfully updated debt
+     */
+    @Override
+    @Transactional
+    public DebtDTO updateDebtDetails(DebtDTO updated, Long id) {
+        DebtDTO original = getDebtById(id); // validates debt and current user's ownership of debt
+
+        Debt debt = debtRepository.findById(original.getId()).orElseThrow(() -> new ResourceNotFoundException("Invalid debt."));
+
+        debt.setName(updated.getName());
+        debt.setApr(updated.getApr());
+        debt.setBalance(updated.getBalance());
+        debt.setDescription(updated.getDescription());
+
+        return MappingUtil.mapToNewClass(debt, DebtDTO.class);
+    }
+
+    /**
      * Deletes debt from the Database
      *
      * @param id: the id of the debt to be deleted
      * @return void
      */
+    @Override
     @Transactional
     public void deleteDebtById(Long id) {
         try {
@@ -131,7 +154,7 @@ public class DebtServiceImpl implements DebtService {
         }
     }
 
-    // Private helper methods
+    // Private helper methods \\
 
     /**
      * Extracts Debt from Request and sets correct DebtType

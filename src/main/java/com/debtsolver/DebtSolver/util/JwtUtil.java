@@ -68,7 +68,7 @@ public class JwtUtil {
      */
     public String extractTokenFromRequest(HttpServletRequest request) {
         String header = request.getHeader(Constants.AUTH_HEADER);
-        if (header !=null && header.startsWith(Constants.TOKEN_START)) {
+        if (header != null && header.startsWith(Constants.TOKEN_START)) {
             return header.substring(Constants.TOKEN_START_LENGTH);
         }
         return null;
