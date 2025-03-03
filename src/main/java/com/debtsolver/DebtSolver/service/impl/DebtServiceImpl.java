@@ -37,7 +37,7 @@ public class DebtServiceImpl implements DebtService {
     /**
      * Retrieves specified debt
      *
-     * @param debtId:  id for desired debt
+     * @param debtId: id for desired debt
      * @return DTO containing fetched debt
      */
     @Override

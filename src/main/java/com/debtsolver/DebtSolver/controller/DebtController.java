@@ -50,8 +50,8 @@ public class DebtController {
      * @return Response Entity containing the debt details
      */
     @GetMapping(Routes.SINGLE_DEBT + "{debtId}")
-    public ResponseEntity<DebtResponse> getSingleDebt( @PathVariable Long debtId) {
-        log.info("API GET {}/{} called",Routes.SINGLE_DEBT, debtId);
+    public ResponseEntity<DebtResponse> getSingleDebt(@PathVariable Long debtId) {
+        log.info("API GET {}/{} called", Routes.SINGLE_DEBT, debtId);
 
         DebtDTO debtDTO = debtService.getDebtById(debtId);
 
@@ -63,7 +63,7 @@ public class DebtController {
      * Creates new debt in database
      *
      * @param debtRequest
-     * @return debtResponse
+     * @return debtResponse and 201 statuscode
      */
     @PostMapping(Routes.NEW_DEBT)
     public ResponseEntity<DebtResponse> saveDebtDetails(@RequestBody @Valid DebtRequest debtRequest) {
@@ -77,7 +77,23 @@ public class DebtController {
         return ResponseEntity.status(HttpStatus.CREATED).body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
     }
 
-    /** Delete debt from database
+    /**
+     * Updates existing debt in database
+     *
+     * @param debtRequest
+     * @return debtResponse and 200 status code
+     */
+    @PutMapping(Routes.SINGLE_DEBT + "{debtId")
+    public ResponseEntity<DebtResponse> updateDebtDetails(@RequestBody @Valid DebtRequest updateRequest, @PathVariable Long debtId) {
+        log.info("API PUT {}{} request: {}", Routes.SINGLE_DEBT, debtId, updateRequest);
+        DebtDTO debtDTO = MappingUtil.mapToNewClass(updateRequest, DebtDTO.class);
+        debtDTO = debtService.updateDebtDetails(debtDTO, debtId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
+    }
+
+    /**
+     * Delete debt from database
      *
      * @param debtId: numeric ID for the debt to be deleted
      * @return: void
