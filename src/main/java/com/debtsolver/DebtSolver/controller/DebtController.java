@@ -28,7 +28,7 @@ public class DebtController {
     private final AuthService authService;
 
     /**
-     * Returns a list of all debts associated with the logged in user
+     * Returns a list of all debts associated with the logged-in user
      *
      * @return Response Entity containing a list of Debts
      */
@@ -50,8 +50,8 @@ public class DebtController {
      * @return Response Entity containing the debt details
      */
     @GetMapping(Routes.SINGLE_DEBT + "{debtId}")
-    public ResponseEntity<DebtResponse> getSingleDebt( @PathVariable Long debtId) {
-        log.info("API GET {}/{} called",Routes.SINGLE_DEBT, debtId);
+    public ResponseEntity<DebtResponse> getSingleDebt(@PathVariable Long debtId) {
+        log.info("API GET {}/{} called", Routes.SINGLE_DEBT, debtId);
 
         DebtDTO debtDTO = debtService.getDebtById(debtId);
 
@@ -63,7 +63,7 @@ public class DebtController {
      * Creates new debt in database
      *
      * @param debtRequest
-     * @return debtResponse
+     * @return debtResponse and 201 status code
      */
     @PostMapping(Routes.NEW_DEBT)
     public ResponseEntity<DebtResponse> saveDebtDetails(@RequestBody @Valid DebtRequest debtRequest) {
@@ -77,7 +77,24 @@ public class DebtController {
         return ResponseEntity.status(HttpStatus.CREATED).body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
     }
 
-    /** Delete debt from database
+    /**
+     * Updates existing debt in database
+     *
+     * @param updateRequest : request with information for the Debt update
+     * @param debtId        : id of the Debt passed in the URI
+     * @return debtResponse and 200 status code
+     */
+    @PutMapping(Routes.SINGLE_DEBT + "{debtId}")
+    public ResponseEntity<DebtResponse> updateDebtDetails(@RequestBody @Valid DebtRequest updateRequest, @PathVariable Long debtId) {
+        log.info("API PUT {}{} request: {}", Routes.SINGLE_DEBT, debtId, updateRequest);
+        DebtDTO debtDTO = MappingUtil.mapToNewClass(updateRequest, DebtDTO.class);
+        debtDTO = debtService.updateDebtDetails(debtDTO, debtId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(MappingUtil.mapToNewClass(debtDTO, DebtResponse.class));
+    }
+
+    /**
+     * Delete debt from database
      *
      * @param debtId: numeric ID for the debt to be deleted
      * @return: void

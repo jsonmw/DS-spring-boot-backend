@@ -34,7 +34,16 @@ public interface DebtService {
      * @param debtRequest: a Request object representation of the debt details to be created
      * @return a DTO of the successfully created debt
      */
-    public DebtDTO createNewDebt(DebtRequest debtRequest);
+    DebtDTO createNewDebt(DebtRequest debtRequest);
+
+    /**
+     * Updates existing debt in the database
+     *
+     * @param updated: a DTO representation of the debt details to be updated
+     * @param id : the id of the debt to be updated
+     * @return a DTO of the successfully updated debt
+     */
+    DebtDTO updateDebtDetails(DebtDTO updated, Long id);
 
     /**
      * Deletes debt from the Database
