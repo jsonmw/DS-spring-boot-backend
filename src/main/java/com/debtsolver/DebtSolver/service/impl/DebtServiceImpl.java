@@ -44,12 +44,12 @@ public class DebtServiceImpl implements DebtService {
     public DebtDTO getDebtById(Long debtId) {
         Long ownerId = authService.getLoggedInUser().getId();
 
-        Debt debt = debtRepository.findByIdAndOwner_Id(debtId, ownerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Debt not found for given user"));
+//        Debt debt =
 
-        log.info("Fetching debt {} for user {}", debt.getName(), userService.getUserById(ownerId).getName());
+//        log.info("Fetching debt {} for user {}", debt.getName(), userService.getUserById(ownerId).getName());
 
-        return MappingUtil.mapToNewClass(debt, DebtDTO.class);
+        return MappingUtil.mapToNewClass(debtRepository.findByIdAndOwner_Id(debtId, ownerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Debt not found for given user")), DebtDTO.class);
     }
 
     /**
@@ -106,7 +106,7 @@ public class DebtServiceImpl implements DebtService {
 
         Debt debt = extractDebt(debtRequest, debtType);
         debt.setOwner(owner);
-
+        log.info("SAVING A DAMN DEBT WITH DETAILS: {}", debt.toString());
         debtRepository.save(debt);
 
         return getDebtDTOType(debt);
@@ -166,12 +166,14 @@ public class DebtServiceImpl implements DebtService {
     private Debt extractDebt(DebtRequest debtRequest, DebtType debtType) {
         switch (debtType) {
             case CARD:
-                Debt cardDebt = MappingUtil.mapToNewClass(debtRequest, Card.class);
+                Card cardDebt = MappingUtil.mapToNewClass(debtRequest, Card.class);
                 cardDebt.setDebtType(DebtType.CARD);  // Explicitly set the debt type
+                log.info("EXTRACTING A DAMN DEBT WITH Card type: {}", cardDebt.getCardType());
                 return cardDebt;
             case LOAN:
-                Debt loanDebt = MappingUtil.mapToNewClass(debtRequest, Loan.class);
+                Loan loanDebt = MappingUtil.mapToNewClass(debtRequest, Loan.class);
                 loanDebt.setDebtType(DebtType.LOAN);  // Explicitly set the debt type
+                log.info("EXTRACTING A DAMN DEBT WITH DETAILS: {}", loanDebt.getTerms());
                 return loanDebt;
             default:
                 throw new InvalidDebtTypeException("Invalid Debt Type: " + debtRequest.getDebtType());
