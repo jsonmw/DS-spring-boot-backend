@@ -106,7 +106,6 @@ public class DebtServiceImpl implements DebtService {
 
         Debt debt = extractDebt(debtRequest, debtType);
         debt.setOwner(owner);
-        log.info("SAVING A DAMN DEBT WITH DETAILS: {}", debt.toString());
         debtRepository.save(debt);
 
         return getDebtDTOType(debt);
@@ -168,12 +167,10 @@ public class DebtServiceImpl implements DebtService {
             case CARD:
                 Card cardDebt = MappingUtil.mapToNewClass(debtRequest, Card.class);
                 cardDebt.setDebtType(DebtType.CARD);  // Explicitly set the debt type
-                log.info("EXTRACTING A DAMN DEBT WITH Card type: {}", cardDebt.getCardType());
                 return cardDebt;
             case LOAN:
                 Loan loanDebt = MappingUtil.mapToNewClass(debtRequest, Loan.class);
                 loanDebt.setDebtType(DebtType.LOAN);  // Explicitly set the debt type
-                log.info("EXTRACTING A DAMN DEBT WITH DETAILS: {}", loanDebt.getTerms());
                 return loanDebt;
             default:
                 throw new InvalidDebtTypeException("Invalid Debt Type: " + debtRequest.getDebtType());
